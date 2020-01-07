@@ -1,12 +1,14 @@
-var postUrl = 'https://hooks.slack.com/services/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';
-
 function fetchDelayInfo() {
+    var userProperties = PropertiesService.getUserProperties();
+    var postUrl = userProperties.getProperty('slackwfurl');
+    var TrainSSID = userProperties.getProperty('TrainSSID');
+
  
   //電車遅延情報をJSON形式で取得
-  var json = JSON.parse(UrlFetchApp.fetch("https://rti-giken.jp/fhc/api/train_tetsudo/delay.json").getContentText());
+  var json = JSON.parse(UrlFetchApp.fetch("https://tetsudo.rti-giken.jp/free/delay.json").getContentText());
  
   //シートとその最終行数、シートのデータを取得
-  var mySheet = SpreadsheetApp.openById('1umDwmfNGhXDl2u49GbUJ0HVPA3cKg1s7VFmoqX6FGv8');
+  var mySheet = SpreadsheetApp.openById(TrainSSID);
   var maxRow = mySheet.getDataRange().getLastRow();
   var myVars = mySheet.getDataRange().getValues();
  
@@ -19,7 +21,7 @@ function fetchDelayInfo() {
  
     for each(var obj in json){
       if(obj.name === name && obj.company === company){
-        body = body + company + name + "が遅延しています(^^;)\n";
+        body = body + "\n" + company + " " + name + "が遅延しています(^^;)\n";
       }
     }
   }
