@@ -1,6 +1,6 @@
 function fetchDelayInfo() {
     var userProperties = PropertiesService.getUserProperties();
-    var postUrl = userProperties.getProperty('slackwfurl');
+    var postUrl = userProperties.getProperty('slackwftrain');
     var TrainSSID = userProperties.getProperty('TrainSSID');
 
  
