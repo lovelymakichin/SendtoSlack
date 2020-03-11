@@ -1,25 +1,25 @@
 function fetchDelayInfo() {
-    var userProperties = PropertiesService.getUserProperties();
-    var postUrl = userProperties.getProperty('slackwftrain');
-    var TrainSSID = userProperties.getProperty('TrainSSID');
+    const userProperties = PropertiesService.getUserProperties();
+    const postUrl = userProperties.getProperty('slackwftrain');
+    const TrainSSID = userProperties.getProperty('TrainSSID');
 
  
   //電車遅延情報をJSON形式で取得
-  var json = JSON.parse(UrlFetchApp.fetch("https://tetsudo.rti-giken.jp/free/delay.json").getContentText());
+  const json = JSON.parse(UrlFetchApp.fetch("https://tetsudo.rti-giken.jp/free/delay.json").getContentText());
  
   //シートとその最終行数、シートのデータを取得
-  var mySheet = SpreadsheetApp.openById(TrainSSID);
-  var maxRow = mySheet.getDataRange().getLastRow();
-  var myVars = mySheet.getDataRange().getValues();
+  const mySheet = SpreadsheetApp.openById(TrainSSID);
+  const maxRow = mySheet.getDataRange().getLastRow();
+  const myVars = mySheet.getDataRange().getValues();
  
-  var body = "■電車運行情報";
+  body = "■電車運行情報";
  
-  for(var i=2;i<=maxRow;i++){ 
+  for(i=2;i<=maxRow;i++){ 
  
-    var name = myVars[i-1][1-1];
-    var company = myVars[i-1][2-1];
+    const name = myVars[i-1][1-1];
+    const company = myVars[i-1][2-1];
  
-    for each(var obj in json){
+    for (const obj of json){
       if(obj.name === name && obj.company === company){
         body = body + "\n" + company + " " + name + "が遅延しています(^^;)\n";
       }
@@ -30,15 +30,15 @@ function fetchDelayInfo() {
     body = body + "\n本日の遅延情報はありません";
   } else{
  
-    var jsonData =
+    const jsonData =
     {
 //       "username" : username,
 //       "icon_emoji": icon,
          "text" : body
     };
-     var payload = JSON.stringify(jsonData);
+     const payload = JSON.stringify(jsonData);
 
-     var options =
+     const options =
      {
        "method" : "post",
        "contentType" : "application/json",
