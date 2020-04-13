@@ -1,13 +1,23 @@
 var icon = ':computer:';  // 通知時に表示されるアイコン
 var userProperties = PropertiesService.getUserProperties();
-var postUrl = userProperties.getProperty('slackwfinfo');
+const TrainSSID = userProperties.getProperty('TrainSSID');
+const CalendarID = userProperties.getProperty('CalendarID');
+var tdate = new Date();
+var ty=tdate.getFullYear();
+var tm=tdate.getMonth()+1;
+var td=tdate.getDate();
+var dayOfWeek = tdate.getDay();	// 曜日(数値)
+
 
 /* 指定のカレンダーの本日の予定をslackに送る */
 function slackSchedule() {
-  var CalendarID = userProperties.getProperty('CalendarID');
+  if(dayOfWeek === 0 || dayOfWeek === 7){    /*平日のみ実施*/
+     return;
+  }
+  var postUrl = userProperties.getProperty('slackwfinfo');
 
   var myCals=CalendarApp.getCalendarById(CalendarID); //特定のIDのカレンダーを取得
-  var myEvents=myCals.getEventsForDay(new Date());　//カレンダーの本日のイベントを取得
+  var myEvents=myCals.getEventsForDay(tdate);　//カレンダーの本日のイベントを取得
 
   var username = 'origin-schedule';  // 通知時に表示されるユーザー名
 
@@ -48,7 +58,6 @@ function slackNoodledayUpdate(){
    var file = DriveApp.getFileById(NoodleDaySSID);
    var lastUpdated = file.getLastUpdated();
    var username = 'lunch-schedule';  // 通知時に表示されるユーザー名
-   var tdate = new Date();
    if (Math.ceil((tdate - lastUpdated) / 86400000) == 1) {
      var strBody = "\n■麺類の日が確定しました"+ "\n"
      var jsonData =
@@ -66,6 +75,7 @@ function slackNoodledayUpdate(){
         "payload" : payload
       };
 
+     
      UrlFetchApp.fetch(postUrl, options);
   
   }  

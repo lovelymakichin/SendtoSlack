@@ -1,11 +1,10 @@
 function fetchDelayInfo() {
-    const userProperties = PropertiesService.getUserProperties();
-    const postUrl = userProperties.getProperty('slackwftrain');
-    const TrainSSID = userProperties.getProperty('TrainSSID');
-
- 
+  if(dayOfWeek === 0 || dayOfWeek === 7){    /*平日のみ実施*/
+     return;
+  }
   //電車遅延情報をJSON形式で取得
   const json = JSON.parse(UrlFetchApp.fetch("https://tetsudo.rti-giken.jp/free/delay.json").getContentText());
+  const postUrl = userProperties.getProperty('slackwftrain');
  
   //シートとその最終行数、シートのデータを取得
   const mySheet = SpreadsheetApp.openById(TrainSSID);
