@@ -55,6 +55,7 @@ function slackSchedule() {
 
 function slackNoodledayUpdate(){
    var NoodleDaySSID = userProperties.getProperty('NoodleDaySSID');
+   var postUrl = userProperties.getProperty('slackwfinfo');
    var file = DriveApp.getFileById(NoodleDaySSID);
    var lastUpdated = file.getLastUpdated();
    var username = 'lunch-schedule';  // 通知時に表示されるユーザー名
